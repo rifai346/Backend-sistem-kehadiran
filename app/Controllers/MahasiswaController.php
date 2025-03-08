@@ -60,6 +60,7 @@ class MahasiswaController extends ResourceController
     public function create()
     {
         $rules = [
+            'npm' => 'required|is_unique[tb_mahasiswa.npm]',
             'nama_mahasiswa' => 'required|string',
             'nama_matkul' => 'required|string',
             'jurusan' => 'required|string',
@@ -73,6 +74,7 @@ class MahasiswaController extends ResourceController
         }
 
         $data = [
+        'npm' => $this->request->getVar('npm'),
         'nama_mahasiswa' => $this->request->getVar('nama_mahasiswa'),
         'nama_matkul' => $this->request->getVar('nama_matkul'),
         'jurusan' => $this->request->getVar('jurusan'),
@@ -106,6 +108,7 @@ class MahasiswaController extends ResourceController
     public function update($id = null)
     {
         $rules = [
+            'npm' => 'required|integer',
             'nama_mahasiswa' => 'required|string',
             'nama_matkul' => 'required|string',
             'jurusan' => 'required|string',
@@ -119,6 +122,7 @@ class MahasiswaController extends ResourceController
         }
 
         $data = [
+        'npm' => $this->request->getVar('npm'),
         'nama_mahasiswa' => $this->request->getVar('nama_mahasiswa'),
         'nama_matkul' => $this->request->getVar('nama_matkul'),
         'jurusan' => $this->request->getVar('jurusan'),
