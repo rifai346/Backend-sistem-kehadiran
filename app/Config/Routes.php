@@ -33,3 +33,9 @@ $routes->post('Matkul', 'MatkulController::create');
 $routes->get('Matkul', 'MatkulController::index');
 $routes->put('Matkul/(:num)', 'MatkulController::update/$1');
 $routes->delete('Matkul/(:num)', 'MatkulController::delete/$1');
+
+$routes->group('api', ['filter' => 'cors'], function($routes) {
+    $routes->options('login', function() { return service('response')->setStatusCode(200); });
+    $routes->post('login', 'AuthController::login');
+});
+$routes->get('dashboard', 'DashboardController::index');

@@ -140,4 +140,15 @@ class KehadiranController extends ResourceController
         $this->model->hapuskehadiran($id);
         return $this->respondDeleted(['message' => 'Data kehadiran berhasil dihapus']);
     }
+
+    public function validate_kehadiran($id){
+        $total_kehadiran = $this->db->where('id_mahasiswa', $id_mahasiswa)->where('status','hadir')->count_all_result('kehadiran');
+        $total_perkuliahan = 30;
+        $kehadiran_persen = ($$total_kehadiran / $total_kehadiran) * 100;
+
+        if ($kehadiran_persen < 75){
+            return false;
+        }
+        return true;
+    }
 }
