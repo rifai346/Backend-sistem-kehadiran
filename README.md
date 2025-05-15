@@ -1,68 +1,131 @@
-# CodeIgniter 4 Application Starter
+# Backend Sistem Kehadiran – CodeIgniter 4
 
-## What is CodeIgniter?
+## 📋 Apa Itu CodeIgniter?
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+CodeIgniter adalah framework PHP full-stack yang ringan, cepat, fleksibel, dan aman. Proyek ini menggunakan CodeIgniter 4 untuk membangun RESTful API untuk sistem kehadiran dengan autentikasi JWT.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+📖 Panduan resmi CodeIgniter dapat ditemukan di [situs resmi](https://codeigniter.com) atau [user guide](https://codeigniter.com/user_guide/).
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+---
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 🚀 Instalasi
 
-## Installation & updates
+### 1. Clone Proyek
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+```bash
+git clone https://github.com/rifai346/Backend-sistem-kehadiran.git
+cd Backend-sistem-kehadiran
+```
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+### 2. Instalasi Dependensi
 
-## Setup
+```bash
+composer install
+```
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### 3. Konfigurasi Lingkungan
 
-## Important Change with index.php
+Salin file `env` menjadi `.env`:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+```bash
+cp env .env
+```
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Sesuaikan konfigurasi di file `.env`:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+```ini
+CI_ENVIRONMENT = development
+app.baseURL = 'http://localhost:8080/'
+database.default.hostname = localhost
+database.default.database = nama_database_anda
+database.default.username = nama_pengguna_database
+database.default.password = kata_sandi_database
+database.default.DBDriver = MySQLi
+```
 
-## Repository Management
+### 4. Migrasi Database
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Pastikan database sudah dibuat, lalu jalankan migrasi:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+```bash
+php spark migrate
+```
 
-## Server Requirements
+### 5. Jalankan Server
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+```bash
+php spark serve
+```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+Aplikasi akan berjalan di `http://localhost:8080`.
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+---
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+## 🔐 Autentikasi JWT
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+Aplikasi ini menggunakan JWT untuk autentikasi. Setelah login berhasil, Anda akan menerima token yang harus disertakan dalam header `Authorization` untuk mengakses endpoint yang dilindungi.
+
+### 1. **Register**
+
+* **Endpoint**: `POST /auth/register`
+* **Body JSON**:
+
+```json
+{
+    "email": "user@example.com",
+    "password": "password123",
+    "role": "user"
+}
+```
+
+### 2. **Login**
+
+* **Endpoint**: `POST /auth/login`
+* **Body JSON**:
+
+```json
+{
+    "email": "user@example.com",
+    "password": "password123"
+}
+```
+
+### 3. **Logout**
+
+* **Endpoint**: `POST /auth/logout`
+* **Header**:
+
+```
+Authorization: Bearer <jwt_token_here>
+```
+
+---
+
+## 📁 Struktur Direktori
+
+* `app/Controllers/AuthController.php`: Mengelola autentikasi (login, register, logout).
+* `app/Models/UserModel.php`: Model untuk tabel pengguna.
+* `app/Libraries/JWTLib.php`: Library untuk mengelola JWT.
+
+---
+
+## 📦 Server Requirements
+
+* PHP 8.1 atau lebih baru.
+* Ekstensi PHP yang diperlukan:
+
+  * intl
+  * mbstring
+  * json (default)
+  * mysqlnd (untuk MySQL)
+  * libcurl (untuk CURLRequest)
+
+---
+
+## 💬 Catatan Tambahan
+
+* Pastikan database sudah terhubung sebelum melakukan migrasi.
+* Perbarui `app.baseURL` di `.env` sesuai dengan URL server Anda.
+* Pastikan JWT secret key sudah dikonfigurasi dengan aman.
+
+Happy coding! 🚀
