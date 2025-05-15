@@ -57,7 +57,7 @@ php spark migrate
 php spark serve
 ```
 
-Aplikasi akan berjalan di `http://localhost:8080`.
+Aplikasi akan berjalan di `http://localhost:8080/`.
 
 ---
 
@@ -67,7 +67,7 @@ Aplikasi ini menggunakan JWT untuk autentikasi. Setelah login berhasil, Anda aka
 
 ### 1. **Register**
 
-* **Endpoint**: `POST /auth/register`
+* **Endpoint**: `POST http://localhost:8080/auth/register`
 * **Body JSON**:
 
 ```json
@@ -78,9 +78,22 @@ Aplikasi ini menggunakan JWT untuk autentikasi. Setelah login berhasil, Anda aka
 }
 ```
 
+* **Respons Sukses**:
+
+```json
+{
+    "status": 201,
+    "message": "Registration successful",
+    "user": {
+        "id": 1,
+        "email": "user@example.com"
+    }
+}
+```
+
 ### 2. **Login**
 
-* **Endpoint**: `POST /auth/login`
+* **Endpoint**: `POST http://localhost:8080/auth/login`
 * **Body JSON**:
 
 ```json
@@ -90,13 +103,135 @@ Aplikasi ini menggunakan JWT untuk autentikasi. Setelah login berhasil, Anda aka
 }
 ```
 
+* **Respons Sukses**:
+
+```json
+{
+    "status": 200,
+    "token": "jwt_token_here",
+    "user_id": 1,
+    "email": "user@example.com",
+    "role": "user"
+}
+```
+
 ### 3. **Logout**
 
-* **Endpoint**: `POST /auth/logout`
+* **Endpoint**: `POST http://localhost:8080/auth/logout`
 * **Header**:
 
 ```
 Authorization: Bearer <jwt_token_here>
+```
+
+* **Respons Sukses**:
+
+```json
+{
+    "status": 200,
+    "message": "Logout berhasil"
+}
+```
+
+---
+
+## 📚 Endpoint untuk Mahasiswa, Dosen, Mata Kuliah, dan Absensi
+
+### Mahasiswa
+
+* **Daftar Mahasiswa**
+
+  * **Endpoint**: `GET http://localhost:8080/mahasiswa`
+  * **Header**:
+
+```
+Authorization: Bearer <jwt_token_here>
+```
+
+* **Tambah Mahasiswa**
+
+  * **Endpoint**: `POST http://localhost:8080/mahasiswa`
+  * **Body JSON**:
+
+```json
+{
+    "nama": "Nama Mahasiswa",
+    "nim": "12345678",
+    "jurusan": "Teknik Informatika"
+}
+```
+
+### Dosen
+
+* **Daftar Dosen**
+
+  * **Endpoint**: `GET http://localhost:8080/dosen`
+  * **Header**:
+
+```
+Authorization: Bearer <jwt_token_here>
+```
+
+* **Tambah Dosen**
+
+  * **Endpoint**: `POST http://localhost:8080/dosen`
+  * **Body JSON**:
+
+```json
+{
+    "nama": "Nama Dosen",
+    "nidn": "12345678",
+    "matakuliah": "Pemrograman Web"
+}
+```
+
+### Mata Kuliah
+
+* **Daftar Mata Kuliah**
+
+  * **Endpoint**: `GET http://localhost:8080/matkul`
+  * **Header**:
+
+```
+Authorization: Bearer <jwt_token_here>
+```
+
+* **Tambah Mata Kuliah**
+
+  * **Endpoint**: `POST http://localhost:8080/matkul`
+  * **Body JSON**:
+
+```json
+{
+    "kode": "IF101",
+    "nama": "Pemrograman Web",
+    "sks": 3
+}
+```
+
+### Absensi
+
+* **Daftar Absensi**
+
+  * **Endpoint**: `GET http://localhost:8080/absensi`
+  * **Header**:
+
+```
+Authorization: Bearer <jwt_token_here>
+```
+
+* **Tambah Absensi**
+
+  * **Endpoint**: `POST http://localhost:8080/absensi`
+  * **Body JSON**:
+
+```json
+{
+    "mahasiswa_id": 1,
+    "matkul_id": 1,
+    "status": "Hadir",
+    "tanggal": "2024-05-15"
+}
 ```
 
 ---
@@ -104,6 +239,10 @@ Authorization: Bearer <jwt_token_here>
 ## 📁 Struktur Direktori
 
 * `app/Controllers/AuthController.php`: Mengelola autentikasi (login, register, logout).
+* `app/Controllers/MahasiswaController.php`: Mengelola data mahasiswa.
+* `app/Controllers/DosenController.php`: Mengelola data dosen.
+* `app/Controllers/MatkulController.php`: Mengelola data mata kuliah.
+* `app/Controllers/AbsensiController.php`: Mengelola data absensi.
 * `app/Models/UserModel.php`: Model untuk tabel pengguna.
 * `app/Libraries/JWTLib.php`: Library untuk mengelola JWT.
 
