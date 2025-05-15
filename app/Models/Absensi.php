@@ -32,4 +32,6 @@ class Absensi extends Model
     public function hapusAbsensi($id){
         return $this->delete($id);
     }
+
+    
 }

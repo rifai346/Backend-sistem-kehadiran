@@ -38,10 +38,70 @@ class AuthController extends ResourceController
         'status' => 200,
         'token' => $token,
         'user_id' => $user['id'],
-        'email' => $user['email']
-        // Tambahkan field lain jika diperlukan
-    ]);
+        'email' => $user['email'],
+        'user' => [
+            'id' => $user['id'], // pastikan kolom ini ada
+            'email' => $user['email'],
+            'role' => $user['role'] 
+            ] // pastik
+            // Tambahkan field lain jika diperlukan
+        ]);
+    
 }
+
+public function register()
+    {
+        try {
+            $json = $this->request->getJSON(true);  // Tambahkan true untuk mengembalikan array
+            
+            // Validasi input
+            if (!$json || empty($json['email']) || empty($json['password']) || empty($json['role'])) {
+                return $this->respond([
+                    'status' => 400,
+                    'message' => 'Bad Request: Missing required fields'
+                ], 400);
+            }
+            
+            $userModel = new UserModel();
+    
+            // Cek jika email sudah digunakan
+            if ($userModel->where('email', $json['email'])->first()) {
+                return $this->respond([
+                    'status' => 409,
+                    'message' => 'Email already in use'
+                ], 409);
+            }
+    
+            // Hash password
+            $hashedPassword = password_hash($json['password'], PASSWORD_BCRYPT);
+    
+            // Simpan pengguna baru
+            $userData = [
+                'email' => $json['email'],
+                'password' => $hashedPassword,
+                'role' => $json['role']
+            ];
+    
+            $userModel->insert($userData);
+    
+            // Buat respons sukses
+            return $this->respondCreated([
+                'status' => 201,
+                'message' => 'Registration successful',
+                'user' => [
+                    'id' => $userModel->getInsertID(),
+                    'email' => $json['email']
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            return $this->respond([
+                'status' => 500,
+                'message' => 'Server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function logout()
     {

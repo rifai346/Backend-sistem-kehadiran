@@ -13,6 +13,8 @@ use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\Filterjwt;
+use App\Filters\rolefilter;
+
 
 class Filters extends BaseFilters
 {
@@ -36,8 +38,8 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
-        'otentikasi'    => Filterjwt::class
-        
+        'otentikasi'    => Filterjwt::class,
+        'role'          => \App\Filters\rolefilter::class
     ];
 
     /**
@@ -73,7 +75,7 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'cors',
+          'cors' => ['except' => ['api/*']],
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',

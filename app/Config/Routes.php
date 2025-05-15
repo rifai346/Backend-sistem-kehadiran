@@ -37,5 +37,10 @@ $routes->delete('Matkul/(:num)', 'MatkulController::delete/$1');
 $routes->group('api', ['filter' => 'cors'], function($routes) {
     $routes->options('login', function() { return service('response')->setStatusCode(200); });
     $routes->post('login', 'AuthController::login');
+
+    $routes->options('register', function() { return service('response')->setStatusCode(200); });
+    $routes->post('register', 'AuthController::register');
 });
 $routes->get('dashboard', 'DashboardController::index');
+
+$routes->get('absensi/cek/(:num)/(:num)', 'AbsensiController::cekKehadiran/$1/$2');

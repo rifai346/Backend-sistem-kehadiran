@@ -143,4 +143,6 @@ class AbsensiController extends ResourceController
         $this->model->hapusAbsensi($id);
         return $this->respondDeleted(['message' => 'Data kehadiran berhasil dihapus']);
     }
+
+    
 }
